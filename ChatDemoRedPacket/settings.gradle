@@ -1,1 +1,2 @@
-include ':app', ':EaseUI', ':RedPacketUIOpen'
+include ':app', ':EaseUI'
+project(':EaseUI').projectDir = new File('../EaseUI')
