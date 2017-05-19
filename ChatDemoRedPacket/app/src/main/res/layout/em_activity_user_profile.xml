@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#eff2f6"
-    android:orientation="vertical" >
-    
-	<RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#eff2f6"
+              android:orientation="vertical">
+
+    <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
         android:background="@color/top_bar_normal_bg"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical">
 
-        <include layout="@layout/ease_commom_back_btn" />
+        <include layout="@layout/ease_commom_back_btn"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -20,21 +20,24 @@
             android:layout_centerInParent="true"
             android:text="@string/title_user_profile"
             android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
     </RelativeLayout>
-    <LinearLayout 
+
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
         android:orientation="vertical"
         >
-        <RelativeLayout 
+
+        <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
+            android:paddingTop="10dp"
             >
-            <ImageView 
+
+            <ImageView
                 android:id="@+id/user_head_avatar"
                 android:layout_width="60dip"
                 android:layout_height="60dip"
@@ -44,7 +47,8 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/em_default_avatar"
                 />
-            <ImageView 
+
+            <ImageView
                 android:id="@+id/user_head_headphoto_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,21 +58,23 @@
                 android:layout_margin="3dip"
                 android:src="@drawable/em_profile_headphoto_update_icon"
                 />
-            
-            <LinearLayout 
+
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@+id/user_head_avatar"
                 android:orientation="vertical"
                 >
-                <LinearLayout 
+
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dip"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     >
-                    <TextView 
+
+                    <TextView
                         android:id="@+id/user_username"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -78,51 +84,56 @@
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
-        <View 
+
+        <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:background="@color/gray_pressed"
-            
+
             />
-        <RelativeLayout 
+
+        <RelativeLayout
             android:id="@+id/rl_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#ffffff"
-            android:paddingTop="10dp"
             android:paddingBottom="10dip"
+            android:paddingTop="10dp"
             >
-            <TextView 
-				android:layout_width="wrap_content"                
-				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-				android:layout_alignParentLeft="true"
-				android:text="@string/nickname"
-				android:textSize="16sp"
-				android:gravity="center_vertical"
-				android:textColor="#808080"
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_margin="5dp"
                 android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:text="@string/nickname"
+                android:textColor="#808080"
+                android:textSize="16sp"
                 />
-            <TextView 
+
+            <TextView
                 android:id="@+id/user_nickname"
-				android:layout_width="wrap_content"                
-				android:layout_height="wrap_content"
-				android:layout_margin="5dp"
-				android:layout_alignParentRight="true"
-				android:paddingRight="20dip"
-				android:textSize="16sp"
-				android:gravity="center_vertical"
-				android:textColor="#3366cc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
                 android:background="#FFFFFF"
+                android:gravity="center_vertical"
+                android:paddingRight="20dip"
+                android:textColor="#3366cc"
+                android:textSize="16sp"
                 />
-            <ImageView 
+
+            <ImageView
                 android:id="@+id/ic_right_arrow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/em_ic_right_arrow"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="5dip"
+                android:src="@drawable/em_ic_right_arrow"
                 />
         </RelativeLayout>
     </LinearLayout>

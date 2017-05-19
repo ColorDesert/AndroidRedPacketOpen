@@ -39,22 +39,20 @@ import java.util.Set;
 public class PermissionsManager {
 
     private static final String TAG = PermissionsManager.class.getSimpleName();
-
+    private static PermissionsManager mInstance = null;
     private final Set<String> mPendingRequests = new HashSet<String>(1);
     private final Set<String> mPermissions = new HashSet<String>(1);
     private final List<WeakReference<PermissionsResultAction>> mPendingActions = new ArrayList<WeakReference<PermissionsResultAction>>(1);
 
-    private static PermissionsManager mInstance = null;
+    private PermissionsManager() {
+        initializePermissionsMap();
+    }
 
     public static PermissionsManager getInstance() {
         if (mInstance == null) {
             mInstance = new PermissionsManager();
         }
         return mInstance;
-    }
-
-    private PermissionsManager() {
-        initializePermissionsMap();
     }
 
     /**

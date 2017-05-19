@@ -413,6 +413,12 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RPRedPacketUtil.getInstance().detachView();
+    }
+
     /**
      * chat row provider
      */
@@ -474,11 +480,5 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragmentHe
             return null;
         }
 
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        RPRedPacketUtil.getInstance().detachView();
     }
 }

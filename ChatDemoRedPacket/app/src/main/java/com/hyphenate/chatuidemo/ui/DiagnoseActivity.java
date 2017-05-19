@@ -33,6 +33,8 @@ import com.hyphenate.util.EMLog;
  */
 public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +77,6 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
 
     }
 
-    private ProgressDialog progressDialog;
-
     public void uploadlog() {
 
         if (progressDialog == null)
@@ -87,6 +87,8 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
         progressDialog.show();
         final String st = getResources().getString(R.string.Log_uploaded_successfully);
         EMClient.getInstance().uploadLog(new EMCallBack() {
+
+            String st3 = getResources().getString(R.string.Log_Upload_failed);
 
             @Override
             public void onSuccess() {
@@ -113,8 +115,6 @@ public class DiagnoseActivity extends BaseActivity implements OnClickListener {
                 // });
 
             }
-
-            String st3 = getResources().getString(R.string.Log_Upload_failed);
 
             @Override
             public void onError(int code, String message) {

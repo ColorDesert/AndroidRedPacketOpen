@@ -40,11 +40,11 @@ import java.util.List;
 
 public class GroupsActivity extends BaseActivity {
     public static final String TAG = "GroupsActivity";
-    private ListView groupListView;
+    public static GroupsActivity instance;
     protected List<EMGroup> grouplist;
+    private ListView groupListView;
     private GroupAdapter groupAdapter;
     private InputMethodManager inputMethodManager;
-    public static GroupsActivity instance;
     private View progressBar;
     private SwipeRefreshLayout swipeRefreshLayout;
 

@@ -17,10 +17,10 @@ import com.hyphenate.chatuidemo.R;
 import com.hyphenate.exceptions.HyphenateException;
 
 public class PublicGroupsSeachActivity extends BaseActivity {
+    public static EMGroup searchedGroup;
     private RelativeLayout containerLayout;
     private EditText idET;
     private TextView nameText;
-    public static EMGroup searchedGroup;
 
     @Override
     protected void onCreate(Bundle arg0) {

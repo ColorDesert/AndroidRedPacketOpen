@@ -57,13 +57,6 @@
             android:theme="@style/horizontal_slide"
             android:windowSoftInputMode="adjustPan"
             />
-        <activity
-            android:name=".redpacket.WebViewActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide"
-            android:windowSoftInputMode="adjustPan"
-            />
 
         <!-- 开屏页 -->
         <activity

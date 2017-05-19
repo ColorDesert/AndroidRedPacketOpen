@@ -27,8 +27,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:background="#209e9e9e"
-        android:orientation="horizontal"
         android:gravity="center"
+        android:orientation="horizontal"
         >
 
         <ImageView

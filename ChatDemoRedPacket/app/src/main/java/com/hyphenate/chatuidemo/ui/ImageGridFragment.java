@@ -44,11 +44,11 @@ import java.util.List;
 public class ImageGridFragment extends Fragment implements OnItemClickListener {
 
     private static final String TAG = "ImageGridFragment";
+    List<VideoEntity> mList;
     private int mImageThumbSize;
     private int mImageThumbSpacing;
     private ImageAdapter mAdapter;
     private ImageResizer mImageResizer;
-    List<VideoEntity> mList;
 
     /**
      * Empty constructor as per the Fragment documentation
@@ -188,6 +188,85 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
         }
     }
 
+    private void getVideoFile() {
+        ContentResolver mContentResolver = getActivity().getContentResolver();
+        Cursor cursor = mContentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Video.DEFAULT_SORT_ORDER);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+                // ID:MediaStore.Audio.Media._ID
+                int id = cursor.getInt(cursor
+                        .getColumnIndexOrThrow(MediaStore.Video.Media._ID));
+
+                // title：MediaStore.Audio.Media.TITLE
+                String title = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
+                // path：MediaStore.Audio.Media.DATA
+                String url = cursor.getString(cursor
+                        .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+
+                // duration：MediaStore.Audio.Media.DURATION
+                int duration = cursor
+                        .getInt(cursor
+                                .getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+
+                // 大小：MediaStore.Audio.Media.SIZE
+                int size = (int) cursor.getLong(cursor
+                        .getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
+
+                VideoEntity entty = new VideoEntity();
+                entty.ID = id;
+                entty.title = title;
+                entty.filePath = url;
+                entty.duration = duration;
+                entty.size = size;
+                mList.add(entty);
+            } while (cursor.moveToNext());
+
+        }
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 100) {
+                Uri uri = data.getParcelableExtra("uri");
+                String[] projects = new String[]{MediaStore.Video.Media.DATA,
+                        MediaStore.Video.Media.DURATION};
+                Cursor cursor = getActivity().getContentResolver().query(
+                        uri, projects, null,
+                        null, null);
+                int duration = 0;
+                String filePath = null;
+
+                if (cursor.moveToFirst()) {
+                    // path：MediaStore.Audio.Media.DATA
+                    filePath = cursor.getString(cursor
+                            .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
+                    // duration：MediaStore.Audio.Media.DURATION
+                    duration = cursor
+                            .getInt(cursor
+                                    .getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
+                    EMLog.d(TAG, "duration:" + duration);
+                }
+                if (cursor != null) {
+                    cursor.close();
+                    cursor = null;
+                }
+
+                getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
+                getActivity().finish();
+
+            }
+        }
+    }
+
     private class ImageAdapter extends BaseAdapter {
 
         private final Context mContext;
@@ -285,85 +364,6 @@ public class ImageGridFragment extends Fragment implements OnItemClickListener {
             ImageView icon;
             TextView tvDur;
             TextView tvSize;
-        }
-    }
-
-    private void getVideoFile() {
-        ContentResolver mContentResolver = getActivity().getContentResolver();
-        Cursor cursor = mContentResolver.query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, null, null, null, MediaStore.Video.DEFAULT_SORT_ORDER);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-
-                // ID:MediaStore.Audio.Media._ID
-                int id = cursor.getInt(cursor
-                        .getColumnIndexOrThrow(MediaStore.Video.Media._ID));
-
-                // title：MediaStore.Audio.Media.TITLE
-                String title = cursor.getString(cursor
-                        .getColumnIndexOrThrow(MediaStore.Video.Media.TITLE));
-                // path：MediaStore.Audio.Media.DATA
-                String url = cursor.getString(cursor
-                        .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-
-                // duration：MediaStore.Audio.Media.DURATION
-                int duration = cursor
-                        .getInt(cursor
-                                .getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-
-                // 大小：MediaStore.Audio.Media.SIZE
-                int size = (int) cursor.getLong(cursor
-                        .getColumnIndexOrThrow(MediaStore.Video.Media.SIZE));
-
-                VideoEntity entty = new VideoEntity();
-                entty.ID = id;
-                entty.title = title;
-                entty.filePath = url;
-                entty.duration = duration;
-                entty.size = size;
-                mList.add(entty);
-            } while (cursor.moveToNext());
-
-        }
-        if (cursor != null) {
-            cursor.close();
-            cursor = null;
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 100) {
-                Uri uri = data.getParcelableExtra("uri");
-                String[] projects = new String[]{MediaStore.Video.Media.DATA,
-                        MediaStore.Video.Media.DURATION};
-                Cursor cursor = getActivity().getContentResolver().query(
-                        uri, projects, null,
-                        null, null);
-                int duration = 0;
-                String filePath = null;
-
-                if (cursor.moveToFirst()) {
-                    // path：MediaStore.Audio.Media.DATA
-                    filePath = cursor.getString(cursor
-                            .getColumnIndexOrThrow(MediaStore.Video.Media.DATA));
-                    // duration：MediaStore.Audio.Media.DURATION
-                    duration = cursor
-                            .getInt(cursor
-                                    .getColumnIndexOrThrow(MediaStore.Video.Media.DURATION));
-                    EMLog.d(TAG, "duration:" + duration);
-                }
-                if (cursor != null) {
-                    cursor.close();
-                    cursor = null;
-                }
-
-                getActivity().setResult(Activity.RESULT_OK, getActivity().getIntent().putExtra("path", filePath).putExtra("dur", duration));
-                getActivity().finish();
-
-            }
         }
     }
 }

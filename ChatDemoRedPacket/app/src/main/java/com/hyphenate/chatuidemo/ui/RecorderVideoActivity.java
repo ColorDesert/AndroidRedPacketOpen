@@ -62,21 +62,23 @@ public class RecorderVideoActivity extends BaseActivity implements
         OnInfoListener {
     private static final String TAG = "RecorderVideoActivity";
     private final static String CLASS_LABEL = "RecordActivity";
+    String localPath = "";// path to save recorded video
+    Parameters cameraParameters = null;
+    int defaultVideoFrameRate = -1;
+    MediaScannerConnection msc = null;
+    ProgressDialog progressDialog = null;
     private PowerManager.WakeLock mWakeLock;
     private ImageView btnStart;
     private ImageView btnStop;
     private MediaRecorder mediaRecorder;
     private VideoView mVideoView;// to display video
-    String localPath = "";// path to save recorded video
     private Camera mCamera;
     private int previewWidth = 480;
     private int previewHeight = 480;
     private Chronometer chronometer;
     private int frontCamera = 0; // 0 is back camera，1 is front camera
     private Button btn_switch;
-    Parameters cameraParameters = null;
     private SurfaceHolder mSurfaceHolder;
-    int defaultVideoFrameRate = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -446,9 +448,6 @@ public class RecorderVideoActivity extends BaseActivity implements
         }
 
     }
-
-    MediaScannerConnection msc = null;
-    ProgressDialog progressDialog = null;
 
     public void sendVideo(View view) {
         if (TextUtils.isEmpty(localPath)) {

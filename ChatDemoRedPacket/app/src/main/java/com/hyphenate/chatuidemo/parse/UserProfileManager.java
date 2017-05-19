@@ -163,22 +163,22 @@ public class UserProfileManager {
         ParseManager.getInstance().asyncGetUserInfo(username, callback);
     }
 
+    private String getCurrentUserNick() {
+        return PreferenceManager.getInstance().getCurrentUserNick();
+    }
+
     private void setCurrentUserNick(String nickname) {
         getCurrentUserInfo().setNick(nickname);
         PreferenceManager.getInstance().setCurrentUserNick(nickname);
     }
 
+    private String getCurrentUserAvatar() {
+        return PreferenceManager.getInstance().getCurrentUserAvatar();
+    }
+
     private void setCurrentUserAvatar(String avatar) {
         getCurrentUserInfo().setAvatar(avatar);
         PreferenceManager.getInstance().setCurrentUserAvatar(avatar);
-    }
-
-    private String getCurrentUserNick() {
-        return PreferenceManager.getInstance().getCurrentUserNick();
-    }
-
-    private String getCurrentUserAvatar() {
-        return PreferenceManager.getInstance().getCurrentUserAvatar();
     }
 
 }

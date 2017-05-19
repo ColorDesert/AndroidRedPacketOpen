@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_itease_layout"
-    android:layout_width="match_parent"
-    android:layout_height="59dp"
-    android:gravity="center_vertical" >
+                android:id="@+id/list_itease_layout"
+                android:layout_width="match_parent"
+                android:layout_height="59dp"
+                android:gravity="center_vertical">
 
- <RelativeLayout
+    <RelativeLayout
         android:id="@+id/avatar_container"
         android:layout_width="59dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true">
 
-      <ImageView
+        <ImageView
             android:id="@+id/avatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:scaleType="fitXY"
-            android:src="@drawable/ease_default_avatar" />
+            android:src="@drawable/ease_default_avatar"/>
     </RelativeLayout>
 
     <TextView
@@ -29,7 +29,7 @@
         android:layout_marginTop="6dp"
         android:layout_toRightOf="@id/avatar_container"
         android:textColor="@color/list_itease_primary_color"
-        android:textSize="16sp" />
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/time"
@@ -39,7 +39,7 @@
         android:layout_marginRight="7dp"
         android:layout_marginTop="6dp"
         android:textColor="@color/list_itease_secondary_color"
-        android:textSize="13sp" />
+        android:textSize="13sp"/>
 
 
     <TextView
@@ -53,6 +53,6 @@
         android:padding="7dp"
         android:singleLine="true"
         android:textColor="@color/list_itease_secondary_color"
-        android:textSize="14sp" />
+        android:textSize="14sp"/>
 
 </RelativeLayout>

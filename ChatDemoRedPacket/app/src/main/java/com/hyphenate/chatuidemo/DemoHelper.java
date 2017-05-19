@@ -62,37 +62,20 @@ import java.util.Map;
 import java.util.UUID;
 
 public class DemoHelper {
-    /**
-     * data sync listener
-     */
-    public interface DataSyncListener {
-        /**
-         * sync complete
-         *
-         * @param success true：data sync successful，false: failed to sync data
-         */
-        void onSyncComplete(boolean success);
-    }
-
     protected static final String TAG = "DemoHelper";
-
-    private EaseUI easeUI;
-
+    private static DemoHelper instance = null;
+    public boolean isVoiceCalling;
+    public boolean isVideoCalling;
     /**
      * EMEventListener
      */
     protected EMMessageListener messageListener = null;
-
+    EMConnectionListener connectionListener;
+    private EaseUI easeUI;
     private Map<String, EaseUser> contactList;
-
     private Map<String, RobotUser> robotList;
-
     private UserProfileManager userProManager;
-
-    private static DemoHelper instance = null;
-
     private DemoModel demoModel = null;
-
     /**
      * sync groups status listener
      */
@@ -105,17 +88,12 @@ public class DemoHelper {
      * sync blacklist status listener
      */
     private List<DataSyncListener> syncBlackListListeners;
-
     private boolean isSyncingGroupsWithServer = false;
     private boolean isSyncingContactsWithServer = false;
     private boolean isSyncingBlackListWithServer = false;
     private boolean isGroupsSyncedWithServer = false;
     private boolean isContactsSyncedWithServer = false;
     private boolean isBlackListSyncedWithServer = false;
-
-    public boolean isVoiceCalling;
-    public boolean isVideoCalling;
-
     private String username;
 
     private Context appContext;
@@ -354,8 +332,6 @@ public class DemoHelper {
         });
     }
 
-    EMConnectionListener connectionListener;
-
     /**
      * set global listener
      */
@@ -431,240 +407,6 @@ public class DemoHelper {
             isGroupAndContactListenerRegisted = true;
         }
 
-    }
-
-    /**
-     * group change listener
-     */
-    class MyGroupChangeListener implements EMGroupChangeListener {
-
-        @Override
-        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
-
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
-
-            // user invite you to join group
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(groupId);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(groupName);
-            msg.setReason(reason);
-            msg.setGroupInviter(inviter);
-            Log.d(TAG, "receive invitation to join the group：" + groupName);
-            msg.setStatus(InviteMesageStatus.GROUPINVITATION);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onInvitationAccepted(String groupId, String invitee, String reason) {
-
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
-
-            //user accept your invitation
-            boolean hasGroup = false;
-            EMGroup _group = null;
-            for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
-                if (group.getGroupId().equals(groupId)) {
-                    hasGroup = true;
-                    _group = group;
-                    break;
-                }
-            }
-            if (!hasGroup)
-                return;
-
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(groupId);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
-            msg.setReason(reason);
-            msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
-            msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onInvitationDeclined(String groupId, String invitee, String reason) {
-
-            new InviteMessgeDao(appContext).deleteMessage(groupId);
-
-            //user declined your invitation
-            EMGroup group = null;
-            for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
-                if (_group.getGroupId().equals(groupId)) {
-                    group = _group;
-                    break;
-                }
-            }
-            if (group == null)
-                return;
-
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(groupId);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(group.getGroupName());
-            msg.setReason(reason);
-            msg.setGroupInviter(invitee);
-            Log.d(TAG, invitee + "Declined to join the group：" + group.getGroupName());
-            msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onUserRemoved(String groupId, String groupName) {
-            //user is removed from group
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onGroupDestroyed(String groupId, String groupName) {
-            // group is dismissed,
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
-
-            // user apply to join group
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(applyer);
-            msg.setTime(System.currentTimeMillis());
-            msg.setGroupId(groupId);
-            msg.setGroupName(groupName);
-            msg.setReason(reason);
-            Log.d(TAG, applyer + " Apply to join group：" + groupName);
-            msg.setStatus(InviteMesageStatus.BEAPPLYED);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onApplicationAccept(String groupId, String groupName, String accepter) {
-
-            String st4 = appContext.getString(R.string.Agreed_to_your_group_chat_application);
-            // your application was accepted
-            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-            msg.setChatType(ChatType.GroupChat);
-            msg.setFrom(accepter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(accepter + " " + st4));
-            msg.setStatus(Status.SUCCESS);
-            // save accept message
-            EMClient.getInstance().chatManager().saveMessage(msg);
-            // notify the accept message
-            getNotifier().vibrateAndPlayTone(msg);
-
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-
-        @Override
-        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
-            // your application was declined, we do nothing here in demo
-        }
-
-        @Override
-        public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
-            // got an invitation
-            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
-            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
-            msg.setChatType(ChatType.GroupChat);
-            msg.setFrom(inviter);
-            msg.setTo(groupId);
-            msg.setMsgId(UUID.randomUUID().toString());
-            msg.addBody(new EMTextMessageBody(inviter + " " + st3));
-            msg.setStatus(EMMessage.Status.SUCCESS);
-            // save invitation as messages
-            EMClient.getInstance().chatManager().saveMessage(msg);
-            // notify invitation message
-            getNotifier().vibrateAndPlayTone(msg);
-            EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
-        }
-    }
-
-    /***
-     * 好友变化listener
-     */
-    public class MyContactListener implements EMContactListener {
-
-        @Override
-        public void onContactAdded(String username) {
-            // save contact
-            Map<String, EaseUser> localUsers = getContactList();
-            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
-            EaseUser user = new EaseUser(username);
-
-            if (!localUsers.containsKey(username)) {
-                userDao.saveContact(user);
-            }
-            toAddUsers.put(username, user);
-            localUsers.putAll(toAddUsers);
-
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
-        }
-
-        @Override
-        public void onContactDeleted(String username) {
-            Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
-            localUsers.remove(username);
-            userDao.deleteContact(username);
-            inviteMessgeDao.deleteMessage(username);
-
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
-        }
-
-        @Override
-        public void onContactInvited(String username, String reason) {
-            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-
-            for (InviteMessage inviteMessage : msgs) {
-                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
-                    inviteMessgeDao.deleteMessage(username);
-                }
-            }
-            // save invitation as message
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(username);
-            msg.setTime(System.currentTimeMillis());
-            msg.setReason(reason);
-            Log.d(TAG, username + "apply to be your friend,reason: " + reason);
-            // set invitation status
-            msg.setStatus(InviteMesageStatus.BEINVITEED);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
-        }
-
-        @Override
-        public void onContactAgreed(String username) {
-            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
-            for (InviteMessage inviteMessage : msgs) {
-                if (inviteMessage.getFrom().equals(username)) {
-                    return;
-                }
-            }
-            // save invitation as message
-            InviteMessage msg = new InviteMessage();
-            msg.setFrom(username);
-            msg.setTime(System.currentTimeMillis());
-            Log.d(TAG, username + "accept your request");
-            msg.setStatus(InviteMesageStatus.BEAGREED);
-            notifyNewInviteMessage(msg);
-            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
-        }
-
-        @Override
-        public void onContactRefused(String username) {
-            // your request was refused
-            Log.d(username, username + " refused to your request");
-        }
     }
 
     /**
@@ -843,22 +585,6 @@ public class DemoHelper {
     }
 
     /**
-     * update contact list
-     *
-     * @param contactList
-     */
-    public void setContactList(Map<String, EaseUser> aContactList) {
-        if (aContactList == null) {
-            if (contactList != null) {
-                contactList.clear();
-            }
-            return;
-        }
-
-        contactList = aContactList;
-    }
-
-    /**
      * save single contact
      */
     public void saveContact(EaseUser user) {
@@ -885,6 +611,22 @@ public class DemoHelper {
     }
 
     /**
+     * update contact list
+     *
+     * @param contactList
+     */
+    public void setContactList(Map<String, EaseUser> aContactList) {
+        if (aContactList == null) {
+            if (contactList != null) {
+                contactList.clear();
+            }
+            return;
+        }
+
+        contactList = aContactList;
+    }
+
+    /**
      * set current username
      *
      * @param username
@@ -904,15 +646,15 @@ public class DemoHelper {
         return username;
     }
 
-    public void setRobotList(Map<String, RobotUser> robotList) {
-        this.robotList = robotList;
-    }
-
     public Map<String, RobotUser> getRobotList() {
         if (isLoggedIn() && robotList == null) {
             robotList = demoModel.getRobotList();
         }
         return robotList;
+    }
+
+    public void setRobotList(Map<String, RobotUser> robotList) {
+        this.robotList = robotList;
     }
 
     /**
@@ -1240,6 +982,252 @@ public class DemoHelper {
 
     public void popActivity(Activity activity) {
         easeUI.popActivity(activity);
+    }
+
+    /**
+     * data sync listener
+     */
+    public interface DataSyncListener {
+        /**
+         * sync complete
+         *
+         * @param success true：data sync successful，false: failed to sync data
+         */
+        void onSyncComplete(boolean success);
+    }
+
+    /**
+     * group change listener
+     */
+    class MyGroupChangeListener implements EMGroupChangeListener {
+
+        @Override
+        public void onInvitationReceived(String groupId, String groupName, String inviter, String reason) {
+
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+
+            // user invite you to join group
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(groupName);
+            msg.setReason(reason);
+            msg.setGroupInviter(inviter);
+            Log.d(TAG, "receive invitation to join the group：" + groupName);
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onInvitationAccepted(String groupId, String invitee, String reason) {
+
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+
+            //user accept your invitation
+            boolean hasGroup = false;
+            EMGroup _group = null;
+            for (EMGroup group : EMClient.getInstance().groupManager().getAllGroups()) {
+                if (group.getGroupId().equals(groupId)) {
+                    hasGroup = true;
+                    _group = group;
+                    break;
+                }
+            }
+            if (!hasGroup)
+                return;
+
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(_group == null ? groupId : _group.getGroupName());
+            msg.setReason(reason);
+            msg.setGroupInviter(invitee);
+            Log.d(TAG, invitee + "Accept to join the group：" + _group == null ? groupId : _group.getGroupName());
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_ACCEPTED);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onInvitationDeclined(String groupId, String invitee, String reason) {
+
+            new InviteMessgeDao(appContext).deleteMessage(groupId);
+
+            //user declined your invitation
+            EMGroup group = null;
+            for (EMGroup _group : EMClient.getInstance().groupManager().getAllGroups()) {
+                if (_group.getGroupId().equals(groupId)) {
+                    group = _group;
+                    break;
+                }
+            }
+            if (group == null)
+                return;
+
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(groupId);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(group.getGroupName());
+            msg.setReason(reason);
+            msg.setGroupInviter(invitee);
+            Log.d(TAG, invitee + "Declined to join the group：" + group.getGroupName());
+            msg.setStatus(InviteMesageStatus.GROUPINVITATION_DECLINED);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onUserRemoved(String groupId, String groupName) {
+            //user is removed from group
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onGroupDestroyed(String groupId, String groupName) {
+            // group is dismissed,
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationReceived(String groupId, String groupName, String applyer, String reason) {
+
+            // user apply to join group
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(applyer);
+            msg.setTime(System.currentTimeMillis());
+            msg.setGroupId(groupId);
+            msg.setGroupName(groupName);
+            msg.setReason(reason);
+            Log.d(TAG, applyer + " Apply to join group：" + groupName);
+            msg.setStatus(InviteMesageStatus.BEAPPLYED);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationAccept(String groupId, String groupName, String accepter) {
+
+            String st4 = appContext.getString(R.string.Agreed_to_your_group_chat_application);
+            // your application was accepted
+            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+            msg.setChatType(ChatType.GroupChat);
+            msg.setFrom(accepter);
+            msg.setTo(groupId);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.addBody(new EMTextMessageBody(accepter + " " + st4));
+            msg.setStatus(Status.SUCCESS);
+            // save accept message
+            EMClient.getInstance().chatManager().saveMessage(msg);
+            // notify the accept message
+            getNotifier().vibrateAndPlayTone(msg);
+
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+
+        @Override
+        public void onApplicationDeclined(String groupId, String groupName, String decliner, String reason) {
+            // your application was declined, we do nothing here in demo
+        }
+
+        @Override
+        public void onAutoAcceptInvitationFromGroup(String groupId, String inviter, String inviteMessage) {
+            // got an invitation
+            String st3 = appContext.getString(R.string.Invite_you_to_join_a_group_chat);
+            EMMessage msg = EMMessage.createReceiveMessage(Type.TXT);
+            msg.setChatType(ChatType.GroupChat);
+            msg.setFrom(inviter);
+            msg.setTo(groupId);
+            msg.setMsgId(UUID.randomUUID().toString());
+            msg.addBody(new EMTextMessageBody(inviter + " " + st3));
+            msg.setStatus(EMMessage.Status.SUCCESS);
+            // save invitation as messages
+            EMClient.getInstance().chatManager().saveMessage(msg);
+            // notify invitation message
+            getNotifier().vibrateAndPlayTone(msg);
+            EMLog.d(TAG, "onAutoAcceptInvitationFromGroup groupId:" + groupId);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_GROUP_CHANAGED));
+        }
+    }
+
+    /***
+     * 好友变化listener
+     */
+    public class MyContactListener implements EMContactListener {
+
+        @Override
+        public void onContactAdded(String username) {
+            // save contact
+            Map<String, EaseUser> localUsers = getContactList();
+            Map<String, EaseUser> toAddUsers = new HashMap<String, EaseUser>();
+            EaseUser user = new EaseUser(username);
+
+            if (!localUsers.containsKey(username)) {
+                userDao.saveContact(user);
+            }
+            toAddUsers.put(username, user);
+            localUsers.putAll(toAddUsers);
+
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactDeleted(String username) {
+            Map<String, EaseUser> localUsers = DemoHelper.getInstance().getContactList();
+            localUsers.remove(username);
+            userDao.deleteContact(username);
+            inviteMessgeDao.deleteMessage(username);
+
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactInvited(String username, String reason) {
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getGroupId() == null && inviteMessage.getFrom().equals(username)) {
+                    inviteMessgeDao.deleteMessage(username);
+                }
+            }
+            // save invitation as message
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            msg.setReason(reason);
+            Log.d(TAG, username + "apply to be your friend,reason: " + reason);
+            // set invitation status
+            msg.setStatus(InviteMesageStatus.BEINVITEED);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactAgreed(String username) {
+            List<InviteMessage> msgs = inviteMessgeDao.getMessagesList();
+            for (InviteMessage inviteMessage : msgs) {
+                if (inviteMessage.getFrom().equals(username)) {
+                    return;
+                }
+            }
+            // save invitation as message
+            InviteMessage msg = new InviteMessage();
+            msg.setFrom(username);
+            msg.setTime(System.currentTimeMillis());
+            Log.d(TAG, username + "accept your request");
+            msg.setStatus(InviteMesageStatus.BEAGREED);
+            notifyNewInviteMessage(msg);
+            broadcastManager.sendBroadcast(new Intent(Constant.ACTION_CONTACT_CHANAGED));
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+            // your request was refused
+            Log.d(username, username + " refused to your request");
+        }
     }
 
 }

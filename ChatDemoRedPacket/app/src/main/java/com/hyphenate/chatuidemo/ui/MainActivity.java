@@ -62,21 +62,65 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
 
     protected static final String TAG = "MainActivity";
+    // user logged into another device
+    public boolean isConflict = false;
     // textview for unread message count
     private TextView unreadLabel;
     // textview for unread event message
     private TextView unreadAddressLable;
-
     private Button[] mTabs;
     private ContactListFragment contactListFragment;
     private Fragment[] fragments;
     private int index;
     private int currentTabIndex;
-    // user logged into another device
-    public boolean isConflict = false;
     // user account was removed
     private boolean isCurrentAccountRemoved = false;
+    private InviteMessgeDao inviteMessgeDao;
+    private android.app.AlertDialog.Builder conflictBuilder;
+    private android.app.AlertDialog.Builder accountRemovedBuilder;
+    private boolean isConflictDialogShow;
+    private boolean isAccountRemovedDialogShow;
+    private BroadcastReceiver internalDebugReceiver;
+    private ConversationListFragment conversationListFragment;
+    EMMessageListener messageListener = new EMMessageListener() {
 
+        @Override
+        public void onMessageReceived(List<EMMessage> messages) {
+            // notify new message
+            for (EMMessage message : messages) {
+                DemoHelper.getInstance().getNotifier().onNewMsg(message);
+            }
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onCmdMessageReceived(List<EMMessage> messages) {
+            //red packet code : 处理红包回执透传消息
+            for (EMMessage message : messages) {
+                EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
+                final String action = cmdMsgBody.action();//获取自定义action
+                if (action.equals(RPConstant.REFRESH_RED_PACKET_ACK_ACTION)) {
+                    RedPacketUtil.receiveRedPacketAckMessage(message);
+                }
+            }
+            //end of red packet code
+            refreshUIWithMessage();
+        }
+
+        @Override
+        public void onMessageReadAckReceived(List<EMMessage> messages) {
+        }
+
+        @Override
+        public void onMessageDeliveryAckReceived(List<EMMessage> message) {
+        }
+
+        @Override
+        public void onMessageChanged(EMMessage message, Object change) {
+        }
+    };
+    private BroadcastReceiver broadcastReceiver;
+    private LocalBroadcastManager broadcastManager;
 
     /**
      * check if current user account was remove
@@ -208,44 +252,6 @@ public class MainActivity extends BaseActivity {
         currentTabIndex = index;
     }
 
-    EMMessageListener messageListener = new EMMessageListener() {
-
-        @Override
-        public void onMessageReceived(List<EMMessage> messages) {
-            // notify new message
-            for (EMMessage message : messages) {
-                DemoHelper.getInstance().getNotifier().onNewMsg(message);
-            }
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onCmdMessageReceived(List<EMMessage> messages) {
-            //red packet code : 处理红包回执透传消息
-            for (EMMessage message : messages) {
-                EMCmdMessageBody cmdMsgBody = (EMCmdMessageBody) message.getBody();
-                final String action = cmdMsgBody.action();//获取自定义action
-                if (action.equals(RPConstant.REFRESH_RED_PACKET_ACK_ACTION)) {
-                    RedPacketUtil.receiveRedPacketAckMessage(message);
-                }
-            }
-            //end of red packet code
-            refreshUIWithMessage();
-        }
-
-        @Override
-        public void onMessageReadAckReceived(List<EMMessage> messages) {
-        }
-
-        @Override
-        public void onMessageDeliveryAckReceived(List<EMMessage> message) {
-        }
-
-        @Override
-        public void onMessageChanged(EMMessage message, Object change) {
-        }
-    };
-
     private void refreshUIWithMessage() {
         runOnUiThread(new Runnable() {
             public void run() {
@@ -304,39 +310,6 @@ public class MainActivity extends BaseActivity {
             }
         };
         broadcastManager.registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    private class MyContactListener implements EMContactListener {
-        @Override
-        public void onContactAdded(String username) {
-        }
-
-        @Override
-        public void onContactDeleted(final String username) {
-            runOnUiThread(new Runnable() {
-                public void run() {
-                    if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
-                            username.equals(ChatActivity.activityInstance.toChatUsername)) {
-                        String st10 = getResources().getString(R.string.have_you_removed);
-                        Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
-                                .show();
-                        ChatActivity.activityInstance.finish();
-                    }
-                }
-            });
-        }
-
-        @Override
-        public void onContactInvited(String username, String reason) {
-        }
-
-        @Override
-        public void onContactAgreed(String username) {
-        }
-
-        @Override
-        public void onContactRefused(String username) {
-        }
     }
 
     private void unregisterBroadcastReceiver() {
@@ -417,8 +390,6 @@ public class MainActivity extends BaseActivity {
         return unreadMsgCountTotal - chatroomUnreadMsgCount;
     }
 
-    private InviteMessgeDao inviteMessgeDao;
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -460,15 +431,6 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    private android.app.AlertDialog.Builder conflictBuilder;
-    private android.app.AlertDialog.Builder accountRemovedBuilder;
-    private boolean isConflictDialogShow;
-    private boolean isAccountRemovedDialogShow;
-    private BroadcastReceiver internalDebugReceiver;
-    private ConversationListFragment conversationListFragment;
-    private BroadcastReceiver broadcastReceiver;
-    private LocalBroadcastManager broadcastManager;
 
     /**
      * show the dialog when user logged into another device
@@ -591,5 +553,38 @@ public class MainActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         PermissionsManager.getInstance().notifyPermissionsChange(permissions, grantResults);
+    }
+
+    private class MyContactListener implements EMContactListener {
+        @Override
+        public void onContactAdded(String username) {
+        }
+
+        @Override
+        public void onContactDeleted(final String username) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    if (ChatActivity.activityInstance != null && ChatActivity.activityInstance.toChatUsername != null &&
+                            username.equals(ChatActivity.activityInstance.toChatUsername)) {
+                        String st10 = getResources().getString(R.string.have_you_removed);
+                        Toast.makeText(MainActivity.this, ChatActivity.activityInstance.getToChatUsername() + st10, Toast.LENGTH_LONG)
+                                .show();
+                        ChatActivity.activityInstance.finish();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onContactInvited(String username, String reason) {
+        }
+
+        @Override
+        public void onContactAgreed(String username) {
+        }
+
+        @Override
+        public void onContactRefused(String username) {
+        }
     }
 }

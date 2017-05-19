@@ -14,17 +14,16 @@ import android.util.Log;
 
 public class GCMPushBroadCast extends BroadcastReceiver {
 
+    protected static int notifyID = 0525; // start notification id
+    protected static int foregroundNotifyID = 0555;
+    protected NotificationManager notificationManager = null;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.i("info", "gcmpush onreceive");
         String alert = intent.getStringExtra("alert");
         sendNotification(context, alert, true);
     }
-
-    protected NotificationManager notificationManager = null;
-
-    protected static int notifyID = 0525; // start notification id
-    protected static int foregroundNotifyID = 0555;
 
     public void sendNotification(Context context, String message, boolean isForeground) {
 

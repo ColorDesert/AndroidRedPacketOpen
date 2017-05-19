@@ -47,9 +47,9 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
     private static final int REQUEST_CODE_EXIT = 1;
     private static final int REQUEST_CODE_EXIT_DELETE = 2;
     private static final int REQUEST_CODE_CLEAR_ALL_HISTORY = 3;
-
+    public static ChatRoomDetailsActivity instance;
     String longClickUsername = null;
-
+    String st = "";
     private String roomId;
     private ProgressBar loadingPB;
     private Button exitBtn;
@@ -57,11 +57,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
     private EMChatRoom room;
     private GridAdapter adapter;
     private ProgressDialog progressDialog;
-
-    public static ChatRoomDetailsActivity instance;
-
-    String st = "";
-
     private List<String> memberList;
 
     @Override
@@ -281,6 +276,29 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
 
     }
 
+    public void back(View view) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
+        TextView textView;
+        ImageView badgeDeleteView;
+    }
+
     /**
      * group member gridadapter
      *
@@ -327,30 +345,6 @@ public class ChatRoomDetailsActivity extends BaseActivity implements OnClickList
         public int getCount() {
             return super.getCount();
         }
-    }
-
-
-    public void back(View view) {
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        instance = null;
-    }
-
-    private static class ViewHolder {
-        ImageView imageView;
-        TextView textView;
-        ImageView badgeDeleteView;
     }
 
 }

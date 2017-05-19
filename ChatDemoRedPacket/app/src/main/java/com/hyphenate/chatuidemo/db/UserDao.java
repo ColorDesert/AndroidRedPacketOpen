@@ -77,20 +77,20 @@ public class UserDao {
         DemoDBManager.getInstance().saveContact(user);
     }
 
-    public void setDisabledGroups(List<String> groups) {
-        DemoDBManager.getInstance().setDisabledGroups(groups);
-    }
-
     public List<String> getDisabledGroups() {
         return DemoDBManager.getInstance().getDisabledGroups();
     }
 
-    public void setDisabledIds(List<String> ids) {
-        DemoDBManager.getInstance().setDisabledIds(ids);
+    public void setDisabledGroups(List<String> groups) {
+        DemoDBManager.getInstance().setDisabledGroups(groups);
     }
 
     public List<String> getDisabledIds() {
         return DemoDBManager.getInstance().getDisabledIds();
+    }
+
+    public void setDisabledIds(List<String> ids) {
+        DemoDBManager.getInstance().setDisabledIds(ids);
     }
 
     public Map<String, RobotUser> getRobotUser() {

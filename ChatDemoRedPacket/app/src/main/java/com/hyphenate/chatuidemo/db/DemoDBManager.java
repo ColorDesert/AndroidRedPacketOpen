@@ -116,20 +116,20 @@ public class DemoDBManager {
         }
     }
 
-    public void setDisabledGroups(List<String> groups) {
-        setList(UserDao.COLUMN_NAME_DISABLED_GROUPS, groups);
-    }
-
     public List<String> getDisabledGroups() {
         return getList(UserDao.COLUMN_NAME_DISABLED_GROUPS);
     }
 
-    public void setDisabledIds(List<String> ids) {
-        setList(UserDao.COLUMN_NAME_DISABLED_IDS, ids);
+    public void setDisabledGroups(List<String> groups) {
+        setList(UserDao.COLUMN_NAME_DISABLED_GROUPS, groups);
     }
 
     public List<String> getDisabledIds() {
         return getList(UserDao.COLUMN_NAME_DISABLED_IDS);
+    }
+
+    public void setDisabledIds(List<String> ids) {
+        setList(UserDao.COLUMN_NAME_DISABLED_IDS, ids);
     }
 
     synchronized private void setList(String column, List<String> strList) {

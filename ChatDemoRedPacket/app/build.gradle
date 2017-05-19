@@ -1,15 +1,13 @@
-
 apply plugin: 'com.android.application'
-apply from: '../buildsystem/dependencies.gradle'
 
 android {
-    compileSdkVersion androidCompileSdkVersion
-    buildToolsVersion androidBuildToolsVersion
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         applicationId "com.hyphenate.chatuidemo"
-        minSdkVersion androidMinSdkVersion
-        targetSdkVersion androidTargetSdkVersion
+        minSdkVersion 11
+        targetSdkVersion 25
         multiDexEnabled true
     }
 
@@ -23,7 +21,7 @@ android {
 }
 
 dependencies {
-//    compile project(':RedPacketUI')
+    compile project(':RedPacketUIOpen')
     compile project(':EaseUI')
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:multidex:1.0.1'

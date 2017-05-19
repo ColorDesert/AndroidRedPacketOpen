@@ -14,8 +14,8 @@ import com.hyphenate.util.EasyUtils;
  */
 public class ChatActivity extends BaseActivity {
     public static ChatActivity activityInstance;
-    private EaseChatFragment chatFragment;
     String toChatUsername;
+    private EaseChatFragment chatFragment;
 
     @Override
     protected void onCreate(Bundle arg0) {

@@ -50,14 +50,13 @@ import java.util.UUID;
 
 public class VideoCallActivity extends CallActivity implements OnClickListener {
 
+    boolean isRecording = false;
     private boolean isMuteState;
     private boolean isHandsfreeState;
     private boolean isAnswered;
     private boolean endCallTriggerByMe = false;
     private boolean monitor = true;
-
     private TextView callStateTextView;
-
     private LinearLayout comingBtnContainer;
     private Button refuseBtn;
     private Button answerBtn;
@@ -72,40 +71,13 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
     private LinearLayout bottomContainer;
     private TextView monitorTextView;
     private TextView netwrokStatusVeiw;
-
     private Handler uiHandler;
-
     private boolean isInCalling;
-    boolean isRecording = false;
     private Button recordBtn;
     private EMVideoCallHelper callHelper;
     private Button toggleVideoBtn;
 
     private BrightnessDataProcess dataProcessor = new BrightnessDataProcess();
-
-    // dynamic adjust brightness
-    class BrightnessDataProcess implements EMCameraDataProcessor {
-        byte yDelta = 0;
-
-        synchronized void setYDelta(byte yDelta) {
-            Log.d("VideoCallActivity", "brigntness uDelta:" + yDelta);
-            this.yDelta = yDelta;
-        }
-
-        // data size is width*height*2
-        // the first width*height is Y, second part is UV
-        // the storage layout detailed please refer 2.x demo CameraHelper.onPreviewFrame
-        @Override
-        public synchronized void onProcessData(byte[] data, Camera camera, int width, int height) {
-            int wh = width * height;
-            for (int i = 0; i < wh; i++) {
-                int d = (data[i] & 0xFF) + yDelta;
-                d = d < 16 ? 16 : d;
-                d = d > 235 ? 235 : d;
-                data[i] = (byte) d;
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,23 +170,6 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         callHelper = EMClient.getInstance().callManager().getVideoCallHelper();
 
         EMClient.getInstance().callManager().setCameraDataProcessor(dataProcessor);
-    }
-
-    class YDeltaSeekBarListener implements SeekBar.OnSeekBarChangeListener {
-
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            dataProcessor.setYDelta((byte) (20.0f * (progress - 50) / 50.0f));
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-        }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-        }
-
     }
 
     /**
@@ -572,6 +527,47 @@ public class VideoCallActivity extends CallActivity implements OnClickListener {
         if (isInCalling) {
             EMClient.getInstance().callManager().resumeVideoTransfer();
         }
+    }
+
+    // dynamic adjust brightness
+    class BrightnessDataProcess implements EMCameraDataProcessor {
+        byte yDelta = 0;
+
+        synchronized void setYDelta(byte yDelta) {
+            Log.d("VideoCallActivity", "brigntness uDelta:" + yDelta);
+            this.yDelta = yDelta;
+        }
+
+        // data size is width*height*2
+        // the first width*height is Y, second part is UV
+        // the storage layout detailed please refer 2.x demo CameraHelper.onPreviewFrame
+        @Override
+        public synchronized void onProcessData(byte[] data, Camera camera, int width, int height) {
+            int wh = width * height;
+            for (int i = 0; i < wh; i++) {
+                int d = (data[i] & 0xFF) + yDelta;
+                d = d < 16 ? 16 : d;
+                d = d > 235 ? 235 : d;
+                data[i] = (byte) d;
+            }
+        }
+    }
+
+    class YDeltaSeekBarListener implements SeekBar.OnSeekBarChangeListener {
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            dataProcessor.setYDelta((byte) (20.0f * (progress - 50) / 50.0f));
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+        }
+
     }
 
 }

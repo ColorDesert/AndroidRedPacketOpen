@@ -58,8 +58,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
     private static final int REQUEST_CODE_EXIT = 1;
     private static final int REQUEST_CODE_EXIT_DELETE = 2;
     private static final int REQUEST_CODE_EDIT_GROUPNAME = 5;
-
-
+    public static GroupDetailsActivity instance;
+    String st = "";
     private String groupId;
     private ProgressBar loadingPB;
     private Button exitBtn;
@@ -67,11 +67,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
     private EMGroup group;
     private GridAdapter adapter;
     private ProgressDialog progressDialog;
-
-    public static GroupDetailsActivity instance;
-
-    String st = "";
-
     private EaseSwitchButton switchButton;
 
     @Override
@@ -511,6 +506,72 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         }
     }
 
+    protected void updateGroup() {
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    EMClient.getInstance().groupManager().getGroupFromServer(groupId);
+
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            ((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount()
+                                    + ")");
+                            loadingPB.setVisibility(View.INVISIBLE);
+                            refreshMembers();
+                            if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
+                                // 显示解散按钮
+                                exitBtn.setVisibility(View.GONE);
+                                deleteBtn.setVisibility(View.VISIBLE);
+                            } else {
+                                // 显示退出按钮
+                                exitBtn.setVisibility(View.VISIBLE);
+                                deleteBtn.setVisibility(View.GONE);
+                            }
+
+                            // update block
+                            EMLog.d(TAG, "group msg is blocked:" + group.isMsgBlocked());
+                            if (group.isMsgBlocked()) {
+                                switchButton.openSwitch();
+                            } else {
+                                switchButton.closeSwitch();
+                            }
+                        }
+                    });
+
+                } catch (Exception e) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            loadingPB.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                }
+            }
+        }).start();
+    }
+
+    public void back(View view) {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance = null;
+    }
+
+    private static class ViewHolder {
+        ImageView imageView;
+        TextView textView;
+        ImageView badgeDeleteView;
+    }
+
     /**
      * 群组成员gridadapter
      *
@@ -518,8 +579,8 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
      */
     private class GridAdapter extends ArrayAdapter<String> {
 
-        private int res;
         public boolean isInDeleteMode;
+        private int res;
         private List<String> objects;
 
         public GridAdapter(Context context, int textViewResourceId, List<String> objects) {
@@ -715,72 +776,6 @@ public class GroupDetailsActivity extends BaseActivity implements OnClickListene
         public int getCount() {
             return super.getCount() + 2;
         }
-    }
-
-    protected void updateGroup() {
-        new Thread(new Runnable() {
-            public void run() {
-                try {
-                    EMClient.getInstance().groupManager().getGroupFromServer(groupId);
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            ((TextView) findViewById(R.id.group_name)).setText(group.getGroupName() + "(" + group.getAffiliationsCount()
-                                    + ")");
-                            loadingPB.setVisibility(View.INVISIBLE);
-                            refreshMembers();
-                            if (EMClient.getInstance().getCurrentUser().equals(group.getOwner())) {
-                                // 显示解散按钮
-                                exitBtn.setVisibility(View.GONE);
-                                deleteBtn.setVisibility(View.VISIBLE);
-                            } else {
-                                // 显示退出按钮
-                                exitBtn.setVisibility(View.VISIBLE);
-                                deleteBtn.setVisibility(View.GONE);
-                            }
-
-                            // update block
-                            EMLog.d(TAG, "group msg is blocked:" + group.isMsgBlocked());
-                            if (group.isMsgBlocked()) {
-                                switchButton.openSwitch();
-                            } else {
-                                switchButton.closeSwitch();
-                            }
-                        }
-                    });
-
-                } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            loadingPB.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-            }
-        }).start();
-    }
-
-    public void back(View view) {
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        setResult(RESULT_OK);
-        finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        instance = null;
-    }
-
-    private static class ViewHolder {
-        ImageView imageView;
-        TextView textView;
-        ImageView badgeDeleteView;
     }
 
     private class GroupChangeListener implements EMGroupChangeListener {

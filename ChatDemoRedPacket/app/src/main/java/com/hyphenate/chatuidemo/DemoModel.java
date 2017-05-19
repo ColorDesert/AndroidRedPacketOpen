@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 public class DemoModel {
-    UserDao dao = null;
     protected Context context = null;
     protected Map<Key, Object> valueCache = new HashMap<Key, Object>();
+    UserDao dao = null;
 
     public DemoModel(Context ctx) {
         context = ctx;
@@ -63,11 +63,6 @@ public class DemoModel {
         return true;
     }
 
-    public void setSettingMsgNotification(boolean paramBoolean) {
-        PreferenceManager.getInstance().setSettingMsgNotification(paramBoolean);
-        valueCache.put(Key.VibrateAndPlayToneOn, paramBoolean);
-    }
-
     public boolean getSettingMsgNotification() {
         Object val = valueCache.get(Key.VibrateAndPlayToneOn);
 
@@ -79,9 +74,9 @@ public class DemoModel {
         return (Boolean) (val != null ? val : true);
     }
 
-    public void setSettingMsgSound(boolean paramBoolean) {
-        PreferenceManager.getInstance().setSettingMsgSound(paramBoolean);
-        valueCache.put(Key.PlayToneOn, paramBoolean);
+    public void setSettingMsgNotification(boolean paramBoolean) {
+        PreferenceManager.getInstance().setSettingMsgNotification(paramBoolean);
+        valueCache.put(Key.VibrateAndPlayToneOn, paramBoolean);
     }
 
     public boolean getSettingMsgSound() {
@@ -95,9 +90,9 @@ public class DemoModel {
         return (Boolean) (val != null ? val : true);
     }
 
-    public void setSettingMsgVibrate(boolean paramBoolean) {
-        PreferenceManager.getInstance().setSettingMsgVibrate(paramBoolean);
-        valueCache.put(Key.VibrateOn, paramBoolean);
+    public void setSettingMsgSound(boolean paramBoolean) {
+        PreferenceManager.getInstance().setSettingMsgSound(paramBoolean);
+        valueCache.put(Key.PlayToneOn, paramBoolean);
     }
 
     public boolean getSettingMsgVibrate() {
@@ -111,9 +106,9 @@ public class DemoModel {
         return (Boolean) (val != null ? val : true);
     }
 
-    public void setSettingMsgSpeaker(boolean paramBoolean) {
-        PreferenceManager.getInstance().setSettingMsgSpeaker(paramBoolean);
-        valueCache.put(Key.SpakerOn, paramBoolean);
+    public void setSettingMsgVibrate(boolean paramBoolean) {
+        PreferenceManager.getInstance().setSettingMsgVibrate(paramBoolean);
+        valueCache.put(Key.VibrateOn, paramBoolean);
     }
 
     public boolean getSettingMsgSpeaker() {
@@ -127,6 +122,26 @@ public class DemoModel {
         return (Boolean) (val != null ? val : true);
     }
 
+    public void setSettingMsgSpeaker(boolean paramBoolean) {
+        PreferenceManager.getInstance().setSettingMsgSpeaker(paramBoolean);
+        valueCache.put(Key.SpakerOn, paramBoolean);
+    }
+
+    public List<String> getDisabledGroups() {
+        Object val = valueCache.get(Key.DisabledGroups);
+
+        if (dao == null) {
+            dao = new UserDao(context);
+        }
+
+        if (val == null) {
+            val = dao.getDisabledGroups();
+            valueCache.put(Key.DisabledGroups, val);
+        }
+
+        //noinspection unchecked
+        return (List<String>) val;
+    }
 
     public void setDisabledGroups(List<String> groups) {
         if (dao == null) {
@@ -146,31 +161,6 @@ public class DemoModel {
         valueCache.put(Key.DisabledGroups, list);
     }
 
-    public List<String> getDisabledGroups() {
-        Object val = valueCache.get(Key.DisabledGroups);
-
-        if (dao == null) {
-            dao = new UserDao(context);
-        }
-
-        if (val == null) {
-            val = dao.getDisabledGroups();
-            valueCache.put(Key.DisabledGroups, val);
-        }
-
-        //noinspection unchecked
-        return (List<String>) val;
-    }
-
-    public void setDisabledIds(List<String> ids) {
-        if (dao == null) {
-            dao = new UserDao(context);
-        }
-
-        dao.setDisabledIds(ids);
-        valueCache.put(Key.DisabledIds, ids);
-    }
-
     public List<String> getDisabledIds() {
         Object val = valueCache.get(Key.DisabledIds);
 
@@ -187,20 +177,29 @@ public class DemoModel {
         return (List<String>) val;
     }
 
-    public void setGroupsSynced(boolean synced) {
-        PreferenceManager.getInstance().setGroupsSynced(synced);
+    public void setDisabledIds(List<String> ids) {
+        if (dao == null) {
+            dao = new UserDao(context);
+        }
+
+        dao.setDisabledIds(ids);
+        valueCache.put(Key.DisabledIds, ids);
     }
 
     public boolean isGroupsSynced() {
         return PreferenceManager.getInstance().isGroupsSynced();
     }
 
-    public void setContactSynced(boolean synced) {
-        PreferenceManager.getInstance().setContactSynced(synced);
+    public void setGroupsSynced(boolean synced) {
+        PreferenceManager.getInstance().setGroupsSynced(synced);
     }
 
     public boolean isContactSynced() {
         return PreferenceManager.getInstance().isContactSynced();
+    }
+
+    public void setContactSynced(boolean synced) {
+        PreferenceManager.getInstance().setContactSynced(synced);
     }
 
     public void setBlacklistSynced(boolean synced) {
@@ -219,45 +218,44 @@ public class DemoModel {
         return PreferenceManager.getInstance().getSettingAllowChatroomOwnerLeave();
     }
 
-    public void setDeleteMessagesAsExitGroup(boolean value) {
-        PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
-    }
-
     public boolean isDeleteMessagesAsExitGroup() {
         return PreferenceManager.getInstance().isDeleteMessagesAsExitGroup();
     }
 
-    public void setAutoAcceptGroupInvitation(boolean value) {
-        PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
+    public void setDeleteMessagesAsExitGroup(boolean value) {
+        PreferenceManager.getInstance().setDeleteMessagesAsExitGroup(value);
     }
 
     public boolean isAutoAcceptGroupInvitation() {
         return PreferenceManager.getInstance().isAutoAcceptGroupInvitation();
     }
 
-
-    public void setAdaptiveVideoEncode(boolean value) {
-        PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
+    public void setAutoAcceptGroupInvitation(boolean value) {
+        PreferenceManager.getInstance().setAutoAcceptGroupInvitation(value);
     }
 
     public boolean isAdaptiveVideoEncode() {
         return PreferenceManager.getInstance().isAdaptiveVideoEncode();
     }
 
-    public void setRestServer(String restServer) {
-        PreferenceManager.getInstance().setRestServer(restServer);
+    public void setAdaptiveVideoEncode(boolean value) {
+        PreferenceManager.getInstance().setAdaptiveVideoEncode(value);
     }
 
     public String getRestServer() {
         return PreferenceManager.getInstance().getRestServer();
     }
 
-    public void setIMServer(String imServer) {
-        PreferenceManager.getInstance().setIMServer(imServer);
+    public void setRestServer(String restServer) {
+        PreferenceManager.getInstance().setRestServer(restServer);
     }
 
     public String getIMServer() {
         return PreferenceManager.getInstance().getIMServer();
+    }
+
+    public void setIMServer(String imServer) {
+        PreferenceManager.getInstance().setIMServer(imServer);
     }
 
     public void enableCustomServer(boolean enable) {

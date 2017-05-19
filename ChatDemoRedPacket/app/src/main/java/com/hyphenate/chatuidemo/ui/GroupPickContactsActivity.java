@@ -136,6 +136,10 @@ public class GroupPickContactsActivity extends BaseActivity {
         return members;
     }
 
+    public void back(View view) {
+        finish();
+    }
+
     /**
      * adapter
      */
@@ -188,10 +192,6 @@ public class GroupPickContactsActivity extends BaseActivity {
 
             return view;
         }
-    }
-
-    public void back(View view) {
-        finish();
     }
 
 }

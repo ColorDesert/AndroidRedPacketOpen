@@ -39,6 +39,25 @@ public class RecyclingImageView extends ImageView {
     }
 
     /**
+     * Notifies the drawable that it's displayed state has changed.
+     *
+     * @param drawable
+     * @param isDisplayed
+     */
+    private static void notifyDrawable(Drawable drawable, final boolean isDisplayed) {
+        if (drawable instanceof RecyclingBitmapDrawable) {
+            // The drawable is a CountingBitmapDrawable, so notify it
+            ((RecyclingBitmapDrawable) drawable).setIsDisplayed(isDisplayed);
+        } else if (drawable instanceof LayerDrawable) {
+            // The drawable is a LayerDrawable, so recurse on each layer
+            LayerDrawable layerDrawable = (LayerDrawable) drawable;
+            for (int i = 0, z = layerDrawable.getNumberOfLayers(); i < z; i++) {
+                notifyDrawable(layerDrawable.getDrawable(i), isDisplayed);
+            }
+        }
+    }
+
+    /**
      * @see ImageView#onDetachedFromWindow()
      */
     @Override
@@ -65,25 +84,6 @@ public class RecyclingImageView extends ImageView {
 
         // Notify old Drawable so it is no longer being displayed
         notifyDrawable(previousDrawable, false);
-    }
-
-    /**
-     * Notifies the drawable that it's displayed state has changed.
-     *
-     * @param drawable
-     * @param isDisplayed
-     */
-    private static void notifyDrawable(Drawable drawable, final boolean isDisplayed) {
-        if (drawable instanceof RecyclingBitmapDrawable) {
-            // The drawable is a CountingBitmapDrawable, so notify it
-            ((RecyclingBitmapDrawable) drawable).setIsDisplayed(isDisplayed);
-        } else if (drawable instanceof LayerDrawable) {
-            // The drawable is a LayerDrawable, so recurse on each layer
-            LayerDrawable layerDrawable = (LayerDrawable) drawable;
-            for (int i = 0, z = layerDrawable.getNumberOfLayers(); i < z; i++) {
-                notifyDrawable(layerDrawable.getDrawable(i), isDisplayed);
-            }
-        }
     }
 
 }

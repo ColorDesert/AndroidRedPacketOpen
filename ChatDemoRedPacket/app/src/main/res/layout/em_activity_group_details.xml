@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res-auto">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
         android:background="@color/top_bar_normal_bg"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical">
 
         <LinearLayout
             android:layout_width="45dp"
             android:layout_height="match_parent"
             android:background="@drawable/ease_common_tab_bg"
-            android:onClick="back" >
+            android:onClick="back">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -22,7 +23,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/em_mm_title_back" />
+                android:src="@drawable/em_mm_title_back"/>
         </LinearLayout>
 
         <TextView
@@ -31,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="#ffffff"
-            android:textSize="20sp" />
+            android:textSize="20sp"/>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -39,19 +40,19 @@
             android:layout_height="26dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="7dp" />
+            android:layout_marginRight="7dp"/>
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#f2f0eb" >
+        android:background="#f2f0eb">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <com.hyphenate.easeui.widget.EaseExpandGridView
                 android:id="@+id/gridview"
@@ -66,21 +67,21 @@
                 android:horizontalSpacing="6dp"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="4"
-                android:verticalSpacing="10dp" />
+                android:verticalSpacing="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:background="#E6E6E6" />
+                android:background="#E6E6E6"/>
 
             <RelativeLayout
                 android:id="@+id/rl_group_id"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:background="@drawable/em_btn_bottom_selector"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tv_group_id"
@@ -91,7 +92,7 @@
                     android:text="@string/group_id"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <TextView
                     android:id="@+id/tv_group_id_value"
@@ -99,7 +100,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginRight="20dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -107,17 +108,18 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
-			<RelativeLayout
+
+            <RelativeLayout
                 android:id="@+id/rl_group_nick"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:background="@drawable/em_btn_bottom_selector"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <TextView
-                	android:id="@+id/tv_group_nick"
+                    android:id="@+id/tv_group_nick"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -125,17 +127,17 @@
                     android:text="@string/group_nick"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
-                
-                  <TextView 
+                    android:typeface="serif"/>
+
+                <TextView
                     android:id="@+id/tv_group_nick_value"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/tv_group_nick"
                     android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/tv_group_nick"
                     android:textSize="18sp"
-                    /> 
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -143,17 +145,18 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/rl_group_owner"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:background="@drawable/em_btn_bottom_selector"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <TextView
-                	android:id="@+id/tv_group_owner"
+                    android:id="@+id/tv_group_owner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -161,17 +164,17 @@
                     android:text="@string/group_owner"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
-                
-                  <TextView 
+                    android:typeface="serif"/>
+
+                <TextView
                     android:id="@+id/tv_group_owner_value"
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toRightOf="@id/tv_group_owner"
                     android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/tv_group_owner"
                     android:textSize="18sp"
-                    /> 
+                    />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -179,13 +182,14 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/clear_all_history"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/em_btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -196,7 +200,7 @@
                     android:text="@string/Empty_the_chat_record"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -204,14 +208,14 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_change_group_name"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/em_btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -222,7 +226,7 @@
                     android:text="@string/Change_the_group_name"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -230,14 +234,14 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rl_blacklist"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/em_btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -248,7 +252,7 @@
                     android:text="@string/blacklist"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -256,7 +260,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
 
             <RelativeLayout
@@ -264,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
                 android:background="@drawable/em_btn_bottom_selector"
-                android:padding="10dip" >
+                android:padding="10dip">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -274,27 +278,29 @@
                     android:text="@string/Shielding_of_the_message"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <com.hyphenate.easeui.widget.EaseSwitchButton
                     android:id="@+id/switch_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    app:switchStatus="close"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    app:switchStatus="close"/>
             </RelativeLayout>
-              <TextView
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="1dip"
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
-                android:background="#E6E6E6" />
-             <RelativeLayout
+                android:background="#E6E6E6"/>
+
+            <RelativeLayout
                 android:id="@+id/rl_search"
                 android:layout_width="match_parent"
                 android:layout_height="50dip"
-                android:background="@drawable/em_btn_bottom_selector" >
+                android:background="@drawable/em_btn_bottom_selector">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -305,7 +311,7 @@
                     android:text="@string/serach_group_message"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
-                    android:typeface="serif" />
+                    android:typeface="serif"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -313,10 +319,9 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="10dip"
                     android:layout_marginRight="10dip"
-                    android:background="#E6E6E6" />
+                    android:background="#E6E6E6"/>
             </RelativeLayout>
 
-          
 
             <Button
                 android:id="@+id/btn_exit_grp"
@@ -329,7 +334,7 @@
                 android:paddingTop="7dp"
                 android:text="@string/Exit_the_group_chat"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <Button
                 android:id="@+id/btn_exitdel_grp"
@@ -343,7 +348,7 @@
                 android:text="@string/dismiss_group"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:visibility="gone" />
+                android:visibility="gone"/>
         </LinearLayout>
     </ScrollView>
 

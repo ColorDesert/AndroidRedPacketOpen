@@ -84,12 +84,12 @@ public class InviteMessage {
         this.groupName = groupName;
     }
 
-    public void setGroupInviter(String inviter) {
-        groupInviter = inviter;
-    }
-
     public String getGroupInviter() {
         return groupInviter;
+    }
+
+    public void setGroupInviter(String inviter) {
+        groupInviter = inviter;
     }
 
 

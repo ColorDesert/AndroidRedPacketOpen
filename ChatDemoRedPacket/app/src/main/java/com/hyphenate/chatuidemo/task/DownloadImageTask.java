@@ -20,14 +20,22 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.util.EMLog;
 
 public class DownloadImageTask extends AsyncTask<EMMessage, Integer, Bitmap> {
-    private DownloadFileCallback callback;
-    Bitmap bitmap = null;
     public boolean downloadThumbnail = false;
+    Bitmap bitmap = null;
     EMMessage message;
+    private DownloadFileCallback callback;
 
     public DownloadImageTask(String remoteDir, DownloadFileCallback callback) {
         this.callback = callback;
         String remoteDir1 = remoteDir;
+    }
+
+    public static String getThumbnailImagePath(String imagePath) {
+        String path = imagePath.substring(0, imagePath.lastIndexOf("/") + 1);
+        path += "th" + imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());
+        EMLog.d("msg", "original image path:" + imagePath);
+        EMLog.d("msg", "thum image path:" + path);
+        return path;
     }
 
     @Override
@@ -57,14 +65,5 @@ public class DownloadImageTask extends AsyncTask<EMMessage, Integer, Bitmap> {
         void downloadProgress(int progress);
 
         void afterDownload(Bitmap bitmap);
-    }
-
-
-    public static String getThumbnailImagePath(String imagePath) {
-        String path = imagePath.substring(0, imagePath.lastIndexOf("/") + 1);
-        path += "th" + imagePath.substring(imagePath.lastIndexOf("/") + 1, imagePath.length());
-        EMLog.d("msg", "original image path:" + imagePath);
-        EMLog.d("msg", "thum image path:" + path);
-        return path;
     }
 }

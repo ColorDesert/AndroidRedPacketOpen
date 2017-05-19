@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingTop="13dp">
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_horizontal"
+              android:orientation="vertical"
+              android:paddingTop="13dp">
 
     <TextView
         android:id="@+id/timestamp"
         style="@style/chat_text_date_style"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="@dimen/margin_chat_activity"
-            android:src="@drawable/ease_default_avatar" />
+            android:src="@drawable/ease_default_avatar"/>
 
         <RelativeLayout
             android:id="@+id/bubble"
@@ -37,7 +37,7 @@
             <ImageView
                 android:id="@+id/iv_money_icon"
                 style="@style/RedPacketIconStyle"
-                android:src="@drawable/em_red_packet_icon" />
+                android:src="@drawable/em_red_packet_icon"/>
 
             <TextView
                 android:id="@+id/tv_money_greeting"
@@ -48,7 +48,7 @@
             <TextView
                 android:id="@+id/tv_money_state"
                 style="@style/RedPacketCheckStyle"
-                android:text="查看红包" />
+                android:text="查看红包"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -57,7 +57,7 @@
 
                 <TextView
                     android:id="@+id/tv_sponsor_name"
-                    style="@style/RedPacketSponsorStyle" />
+                    style="@style/RedPacketSponsorStyle"/>
 
                 <TextView
                     android:id="@+id/tv_packet_type"
@@ -68,9 +68,9 @@
                     android:layout_marginTop="3dp"
                     android:textColor="#D24F44"
                     android:textSize="12sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"/>
 
-                <ImageView style="@style/RedPacketSponsorIconStyle" />
+                <ImageView style="@style/RedPacketSponsorIconStyle"/>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -82,7 +82,7 @@
             android:layout_toLeftOf="@id/bubble"
             android:clickable="true"
             android:src="@drawable/ease_msg_state_failed_resend"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_ack"
@@ -93,7 +93,7 @@
             android:layout_toLeftOf="@id/bubble"
             android:text="@string/text_ack_msg"
             android:textSize="12sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <TextView
             android:id="@+id/tv_delivered"
@@ -104,7 +104,7 @@
             android:layout_toLeftOf="@id/tv_chatcontent"
             android:text="@string/text_delivered_msg"
             android:textSize="12sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
@@ -112,7 +112,7 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/bubble"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </RelativeLayout>
 
 </LinearLayout>

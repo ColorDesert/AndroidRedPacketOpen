@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="#fff"
+              android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/rl_title_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_top_bar"
         android:background="@color/top_bar_normal_bg"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical">
 
-        <include layout="@layout/ease_commom_back_btn" />
+        <include layout="@layout/ease_commom_back_btn"/>
 
         <TextView
             android:id="@+id/tv_contact_details"
@@ -21,13 +21,13 @@
             android:layout_centerInParent="true"
             android:text="@string/select_contacts"
             android:textColor="@color/bottom_text_color_normal"
-            android:textSize="18sp" />
+            android:textSize="18sp"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <ListView
             android:id="@+id/list"
@@ -37,7 +37,7 @@
             android:cacheColorHint="#00000000"
             android:descendantFocusability="afterDescendants"
             android:divider="#E2E2E2"
-            android:dividerHeight="1dp" />
+            android:dividerHeight="1dp"/>
 
         <com.hyphenate.easeui.widget.EaseSidebar
             android:id="@+id/sidebar"
@@ -45,7 +45,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
             android:background="@android:color/transparent"
-            android:clickable="true" />
+            android:clickable="true"/>
 
         <TextView
             android:id="@+id/floating_header"
@@ -58,7 +58,7 @@
             android:paddingRight="25dp"
             android:textColor="@android:color/white"
             android:textSize="40sp"
-            android:visibility="invisible" />
+            android:visibility="invisible"/>
     </RelativeLayout>
 
 </LinearLayout>

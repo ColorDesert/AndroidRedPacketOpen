@@ -18,7 +18,6 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.crashlytics.android.Crashlytics;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.utils.EaseUserUtils;
@@ -29,21 +28,21 @@ import com.yunzhanghu.redpacketsdk.bean.RedPacketInfo;
 import com.yunzhanghu.redpacketsdk.bean.TokenData;
 import com.yunzhanghu.redpacketsdk.constant.RPConstant;
 
-import io.fabric.sdk.android.Fabric;
-
 
 public class DemoApplication extends Application {
 
     public static Context applicationContext;
-
-    private static DemoApplication instance;
-    // login user name
-    public final String PREF_USERNAME = "username";
-
     /**
      * nickname for current user, the nickname instead of ID be shown when user receive notification from APNs
      */
     public static String currentUserNick = "";
+    private static DemoApplication instance;
+    // login user name
+    public final String PREF_USERNAME = "username";
+
+    public static DemoApplication getInstance() {
+        return instance;
+    }
 
     @Override
     public void onCreate() {
@@ -87,10 +86,6 @@ public class DemoApplication extends Application {
         });
         RedPacket.getInstance().setDebugMode(true);
         //end of red packet code
-    }
-
-    public static DemoApplication getInstance() {
-        return instance;
     }
 
     @Override

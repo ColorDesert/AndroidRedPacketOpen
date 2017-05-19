@@ -154,6 +154,14 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
         }
     }
 
+    private static class ViewHolder {
+        TextView name;
+        TextView message;
+        TextView time;
+        ImageView avatar;
+
+    }
+
     private class SearchedMessageAdapter extends ArrayAdapter<EMMessage> {
 
         public SearchedMessageAdapter(Context context, int resource, List<EMMessage> objects) {
@@ -184,14 +192,6 @@ public class GroupSearchMessageActivity extends BaseActivity implements OnClickL
 
             return convertView;
         }
-
-    }
-
-    private static class ViewHolder {
-        TextView name;
-        TextView message;
-        TextView time;
-        ImageView avatar;
 
     }
 

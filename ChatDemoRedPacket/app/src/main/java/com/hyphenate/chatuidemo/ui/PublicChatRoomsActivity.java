@@ -48,16 +48,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublicChatRoomsActivity extends BaseActivity {
+    private final int pagesize = 50;
     private ProgressBar pb;
     private ListView listView;
     private ChatRoomAdapter adapter;
-
     private List<EMChatRoom> chatRoomList;
     private boolean isLoading;
     private boolean isFirstLoading = true;
     private boolean hasMoreData = true;
     private String cursor;
-    private final int pagesize = 50;
     private LinearLayout footLoadingLayout;
     private ProgressBar footLoadingPB;
     private TextView footLoadingText;
@@ -244,6 +243,10 @@ public class PublicChatRoomsActivity extends BaseActivity {
     public void search(View view) {
     }
 
+    public void back(View view) {
+        finish();
+    }
+
     /**
      * adapter
      */
@@ -307,9 +310,5 @@ public class PublicChatRoomsActivity extends BaseActivity {
             }
 
         }
-    }
-
-    public void back(View view) {
-        finish();
     }
 }

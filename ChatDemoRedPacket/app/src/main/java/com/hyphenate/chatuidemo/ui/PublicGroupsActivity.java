@@ -42,16 +42,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublicGroupsActivity extends BaseActivity {
+    private final int pagesize = 20;
     private ProgressBar pb;
     private ListView listView;
     private GroupsAdapter adapter;
-
     private List<EMGroupInfo> groupsList;
     private boolean isLoading;
     private boolean isFirstLoading = true;
     private boolean hasMoreData = true;
     private String cursor;
-    private final int pagesize = 20;
     private LinearLayout footLoadingLayout;
     private ProgressBar footLoadingPB;
     private TextView footLoadingText;
@@ -161,6 +160,10 @@ public class PublicGroupsActivity extends BaseActivity {
         }).start();
     }
 
+    public void back(View view) {
+        finish();
+    }
+
     /**
      * adapter
      */
@@ -183,9 +186,5 @@ public class PublicGroupsActivity extends BaseActivity {
 
             return convertView;
         }
-    }
-
-    public void back(View view) {
-        finish();
     }
 }

@@ -22,14 +22,11 @@ import com.hyphenate.chatuidemo.DemoHelper;
 public class DbOpenHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 6;
-    private static DbOpenHelper instance;
-
     private static final String USERNAME_TABLE_CREATE = "CREATE TABLE "
             + UserDao.TABLE_NAME + " ("
             + UserDao.COLUMN_NAME_NICK + " TEXT, "
             + UserDao.COLUMN_NAME_AVATAR + " TEXT, "
             + UserDao.COLUMN_NAME_ID + " TEXT PRIMARY KEY);";
-
     private static final String INIVTE_MESSAGE_TABLE_CREATE = "CREATE TABLE "
             + InviteMessgeDao.TABLE_NAME + " ("
             + InviteMessgeDao.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -42,17 +39,16 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             + InviteMessgeDao.COLUMN_NAME_UNREAD_MSG_COUNT + " INTEGER, "
             + InviteMessgeDao.COLUMN_NAME_TIME + " TEXT, "
             + InviteMessgeDao.COLUMN_NAME_GROUPINVITER + " TEXT); ";
-
     private static final String ROBOT_TABLE_CREATE = "CREATE TABLE "
             + UserDao.ROBOT_TABLE_NAME + " ("
             + UserDao.ROBOT_COLUMN_NAME_ID + " TEXT PRIMARY KEY, "
             + UserDao.ROBOT_COLUMN_NAME_NICK + " TEXT, "
             + UserDao.ROBOT_COLUMN_NAME_AVATAR + " TEXT);";
-
     private static final String CREATE_PREF_TABLE = "CREATE TABLE "
             + UserDao.PREF_TABLE_NAME + " ("
             + UserDao.COLUMN_NAME_DISABLED_GROUPS + " TEXT, "
             + UserDao.COLUMN_NAME_DISABLED_IDS + " TEXT);";
+    private static DbOpenHelper instance;
 
     private DbOpenHelper(Context context) {
         super(context, getUserDatabaseName(), null, DATABASE_VERSION);

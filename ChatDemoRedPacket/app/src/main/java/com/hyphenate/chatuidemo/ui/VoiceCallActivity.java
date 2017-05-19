@@ -45,20 +45,18 @@ import java.util.UUID;
  * 语音通话页面
  */
 public class VoiceCallActivity extends CallActivity implements OnClickListener {
+    String st1;
     private LinearLayout comingBtnContainer;
     private Button hangupBtn;
     private Button refuseBtn;
     private Button answerBtn;
     private ImageView muteImage;
     private ImageView handsFreeImage;
-
     private boolean isMuteState;
     private boolean isHandsfreeState;
-
     private TextView callStateTextView;
     private boolean endCallTriggerByMe = false;
     private Chronometer chronometer;
-    String st1;
     private LinearLayout voiceContronlLayout;
     private TextView netwrokStatusVeiw;
 

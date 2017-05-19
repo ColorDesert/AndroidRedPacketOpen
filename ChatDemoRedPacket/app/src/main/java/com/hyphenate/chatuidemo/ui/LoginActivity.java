@@ -38,8 +38,8 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
  * Login screen
  */
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
     public static final int REQUEST_CODE_SETNICK = 1;
+    private static final String TAG = "LoginActivity";
     private EditText usernameEditText;
     private EditText passwordEditText;
 
