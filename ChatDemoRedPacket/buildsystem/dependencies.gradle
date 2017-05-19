@@ -1,0 +1,25 @@
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+ext {
+    //Android
+    androidCompileSdkVersion = 25
+    androidBuildToolsVersion = "25.0.2"
+    androidMinSdkVersion = 11
+    androidTargetSdkVersion = 25
+    androidVersionCode = 6
+    androidVersionName = "1.1.3"
+
+    supportVersion = "25.3.1"
+
+    recyclerViewVersion = "25.3.1"
+
+
+    presentationDependencies = [
+            supportV4   : "com.android.support:support-v4:${supportVersion}",
+            recyclerView: "com.android.support:recyclerview-v7:${recyclerViewVersion}"
+    ]
+}
